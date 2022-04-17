@@ -1,0 +1,12 @@
+[package]
+name = "zmachine"
+version = "0.1.0"
+authors = ["moosepod <mchristensen@moosepod.com>"]
+edition = "2018"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.7.3"
+rand_chacha = "0.2.2"
