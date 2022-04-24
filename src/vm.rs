@@ -1100,12 +1100,14 @@ impl VM {
                     addr, invert, branch_addr
                 ));
 
-                // Set the PC so restore assumes success
-                self.pc += BYTE_LENGTH;
+                // Set the PC so restore ends up where story will be
+                // post-save
 
                 if invert {
-                    self.state = VMState::SavePrompt(addr + BYTE_LENGTH, branch_addr);
+                    self.pc = addr;
+                    self.state = VMState::SavePrompt(addr, branch_addr);
                 } else {
+                    self.pc = branch_addr;
                     self.state = VMState::SavePrompt(branch_addr, addr);
                 }
             }

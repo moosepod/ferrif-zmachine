@@ -1166,17 +1166,15 @@ fn test_save_action() -> Result<(), ZmachineError> {
     let mut vm = VM::create_from_story_bytes(load_test_story_data(TestStory::Basic2), false, false)
         .expect("Error loading story");
 
-    let old_pc = vm.get_pc();
     assert_eq!(VMState::Running, vm.get_state());
 
     vm.handle_action(Action::Save(0x1234, false, 0x4321), &mut io);
     assert_eq!(VMState::SavePrompt(0x4321, 0x1234), vm.get_state());
-    assert_eq!(old_pc + 1, vm.get_pc());
+    assert_eq!(0x4321, vm.get_pc());
 
-    let old_pc = vm.get_pc();
     vm.handle_action(Action::Save(0x1234, true, 0x4321), &mut io);
-    assert_eq!(VMState::SavePrompt(0x1235, 0x4321), vm.get_state());
-    assert_eq!(old_pc + 1, vm.get_pc());
+    assert_eq!(VMState::SavePrompt(0x1234, 0x4321), vm.get_state());
+    assert_eq!(0x1234, vm.get_pc());
 
     Ok(())
 }
