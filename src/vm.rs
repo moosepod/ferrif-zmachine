@@ -1841,8 +1841,7 @@ impl VM {
         self.reset_header()
             .expect("Error resetting header after restore");
 
-        // In a "normal" PC this has to be incremented by 1 for the game to properly restore.
-        self.pc = quetzal_data.initial_pc + 1;
+        self.pc = quetzal_data.initial_pc;
         Ok(true)
     }
 
