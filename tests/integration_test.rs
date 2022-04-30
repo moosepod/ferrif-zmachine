@@ -1822,8 +1822,7 @@ fn test_save_and_restore_basic_1() -> Result<(), ZmachineError> {
     assert!(vm2.get_bit(0x10, 1)?); // fixed pitch, preserved
 
     // Check PC
-    assert_eq!(0x1235, vm2.get_pc()); // PC is one byte ahead after a restore
-                                      // Expand to test all stack frames, local variables, global variables
+    assert_eq!(0x1234, vm2.get_pc());
 
     // Decrement PC and adjust header RST fields so states will match
     vm2.set_pc(0x1234);
@@ -1872,8 +1871,7 @@ fn test_save_and_restore_basic_3() -> Result<(), ZmachineError> {
 
     // Check PC
 
-    assert_eq!(0x1235, vm2.get_pc()); // PC is one byte ahead after a restore
-                                      // Expand to test all stack frames, local variables, global variables
+    assert_eq!(0x1234, vm2.get_pc());
 
     // Decrement PC and adjust header RST fields so states will match
     vm2.set_pc(0x1234);
@@ -1935,8 +1933,7 @@ fn test_save_and_restore_compressed() -> Result<(), ZmachineError> {
 
     // Check PC
 
-    assert_eq!(0x1235, vm2.get_pc()); // PC is one byte ahead after a restore
-                                      // Expand to test all stack frames, local variables, global variables
+    assert_eq!(0x1234, vm2.get_pc());
 
     // Decrement PC and adjust header RST fields so states will match
     vm2.set_pc(0x1234);
