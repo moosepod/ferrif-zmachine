@@ -803,7 +803,7 @@ impl VM {
             memory: Vec::new(),
             routine_stack: Vec::new(),
             stack: Vec::new(),
-            error_mode: ErrorMode::Panic,
+            error_mode: ErrorMode::Ignore,
             high_memory_address: 0,
             initial_pc_address: 0,
             dictionary_address: 0,
