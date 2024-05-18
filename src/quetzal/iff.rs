@@ -295,7 +295,7 @@ fn add_chunk_to_data(chunk: &IffChunk, writer: &mut IffWriter) {
             GenericChunk {
                 chunk_id: ['I' as u8, 'n' as u8, 't' as u8, 'D' as u8],
                 data: writer.data,
-                data_size: data_len as u32,
+                data_size: data_len,
             }
         }
         IffChunk::Stks(frames) => {
@@ -313,7 +313,7 @@ fn add_chunk_to_data(chunk: &IffChunk, writer: &mut IffWriter) {
             GenericChunk {
                 chunk_id: ['S' as u8, 't' as u8, 'k' as u8, 's' as u8],
                 data: writer.data,
-                data_size: data_len as u32,
+                data_size: data_len,
             }
         }
         IffChunk::FORM(form_id, form_chunks) => {

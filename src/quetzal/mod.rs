@@ -35,7 +35,6 @@ pub fn queztal_data_to_bytes(data: QuetzalData) -> Vec<u8> {
     save_iff_chunks_to_bytes(chunks).unwrap()
 }
 
-///
 pub struct QuetzalRestoreHandler {}
 
 impl QuetzalRestoreHandler {
@@ -92,15 +91,15 @@ impl QuetzalRestoreHandler {
                                     queztal_data.serial = serial_number;
                                 }
                                 IffChunk::Stks(frames) => {
-                                    queztal_data.stack_frames = frames.clone();
+                                    queztal_data.stack_frames.clone_from(&frames);
                                 }
                                 IffChunk::CMem(data) => {
                                     queztal_data.data_is_compressed = true;
-                                    queztal_data.data = data.clone();
+                                    queztal_data.data.clone_from(&data);
                                 }
                                 IffChunk::UMem(data) => {
                                     queztal_data.data_is_compressed = false;
-                                    queztal_data.data = data.clone();
+                                    queztal_data.data.clone_from(&data);
                                 }
                                 _ => (),
                             }

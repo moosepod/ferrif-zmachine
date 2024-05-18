@@ -339,7 +339,7 @@ enum TextParseState {
     ExtendedChar2,
 }
 
-impl<'a> MemoryReader for VM {
+impl MemoryReader for VM {
     // Return the byte at address, with error if read is outside of bounds
     fn get_byte(&self, address: usize) -> Result<u8, ZmachineError> {
         if address > self.memory.len() {
@@ -495,7 +495,7 @@ impl<'a> MemoryReader for VM {
     }
 }
 
-impl<'a> ObjectTreeReader for VM {
+impl ObjectTreeReader for VM {
     // Return the address of the property data for the numbered property, or 0 if no such property
     fn get_property_address(&self, object: usize, property: usize) -> Result<usize, ZmachineError> {
         match self.version {
@@ -859,8 +859,8 @@ impl VM {
         check_length: bool,
     ) -> Result<(), VMLoadError> {
         // Validate version
-        self.story = story_data.clone();
-        self.memory = story_data.clone();
+        self.story.clone_from(&story_data);
+        self.memory.clone_from(&story_data);
 
         let version = match story_data[HEADER_VERSION] {
             1 => ZCodeVersion::V1,
@@ -1293,7 +1293,7 @@ impl VM {
                     };
 
                     let routine = Routine::create_from_address(
-                        routine_addr as usize,
+                        routine_addr,
                         return_to,
                         arguments,
                         store_var,
@@ -1517,7 +1517,7 @@ impl VM {
                     value, addr
                 ));
 
-                if !self.is_writeable(addr as usize) {
+                if !self.is_writeable(addr) {
                     self.set_error_state(format!(
                         "StoreByte: attempt to use unwriteable address {:06X}",
                         addr
@@ -1542,7 +1542,7 @@ impl VM {
                     bytes, addr
                 ));
 
-                if !self.is_writeable_range(addr as usize, bytes.len()) {
+                if !self.is_writeable_range(addr, bytes.len()) {
                     self.set_error_state(format!(
                         "StoreBytes: attempt to use unwriteable address {:06X} w/ length {:}",
                         addr,
@@ -1567,7 +1567,7 @@ impl VM {
                     "          STORE word {:04X} to addr {:06X}",
                     value, addr
                 ));
-                if !self.is_writeable_range(addr as usize, WORD_LENGTH) {
+                if !self.is_writeable_range(addr, WORD_LENGTH) {
                     self.set_error_state(format!(
                         "StoreWord: attempt to use unwriteable address {:06X}",
                         addr
@@ -1667,7 +1667,7 @@ impl VM {
                             true
                         }
                     }
-                    ZCodeVersion::V1 | ZCodeVersion::V2 => (true),
+                    ZCodeVersion::V1 | ZCodeVersion::V2 => true,
                 };
                 if process_instruction {
                     match handle_instruction(self.pc, self, self.version, self.debug_verbosity) {
@@ -2229,7 +2229,7 @@ impl VM {
                     size = ((size_byte >> 5) + 1) as usize; // pull upper 3 for size
                     property_number = (size_byte & 0x1f) as usize; // pull lower 5 for property_number
                     property_data_address = properties_addr + 1;
-                    next_property_address = properties_addr + (1 + size) as usize;
+                    next_property_address = properties_addr + (1 + size);
                     // account for size byte in offset
                 }
 
@@ -2270,7 +2270,7 @@ impl VM {
         match self.version {
             ZCodeVersion::V1 | ZCodeVersion::V2 | ZCodeVersion::V3 => {
                 let mut object: u8 = 0;
-                let mut lowest_property_address: usize = self.get_last_address() as usize;
+                let mut lowest_property_address: usize = self.get_last_address();
 
                 loop {
                     if object == 255 {
@@ -2811,7 +2811,7 @@ impl VM {
                         // In extended, convert two chars into single char, then map that
                         let mapped = ((zchars[i - 1] << 5) as u16) | (zc as u16);
 
-                        match self.zscii_to_output_char(mapped as u16) {
+                        match self.zscii_to_output_char(mapped) {
                             Err(_) => {
                                 match self.error_mode {
                                     ErrorMode::Ignore => {
@@ -3359,7 +3359,7 @@ pub fn compress_story_data(dynamic_memory_end: usize, story: &[u8], memory: &[u8
     let mut data = vec![];
     let mut idx: usize = 0;
 
-    while idx < dynamic_memory_end as usize {
+    while idx < dynamic_memory_end {
         let byte: u8 = memory[idx] ^ story[idx];
         if byte != 0 {
             // Non zero bytes stored as xor with original story data

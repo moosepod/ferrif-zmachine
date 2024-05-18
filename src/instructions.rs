@@ -1241,7 +1241,7 @@ fn extract_operands<T: MemoryReader>(
                 pc += BYTE_LENGTH;
             }
             OperandType::Variable => {
-                let variable = reader.get_byte(pc)? as u8;
+                let variable = reader.get_byte(pc)?;
                 let var_val = reader.get_variable(variable)?;
                 // print!(", Var {:04X} = {:04X}", variable, var_val);
                 operands.push(Operand {
