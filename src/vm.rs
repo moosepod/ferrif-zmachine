@@ -3096,6 +3096,11 @@ impl VM {
         )
     }
 
+    pub fn get_dictionary(&self) -> Vec<DictionaryWord> {
+        return self.dictionary_words.clone();
+    }
+        
+
     pub fn dump_dictionary(&self) {
         print!("Word separators: ");
         for c in self.dictionary_word_separators.iter() {
