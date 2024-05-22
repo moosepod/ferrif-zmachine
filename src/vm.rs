@@ -3097,7 +3097,7 @@ impl VM {
     }
 
     pub fn get_dictionary(&self) -> Vec<DictionaryWord> {
-        return self.dictionary_words.clone();
+        self.dictionary_words.clone()
     }
         
 
