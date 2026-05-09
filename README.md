@@ -1,3 +1,5 @@
+This repo has been migrated to https://tangled.org/moosepod.com/ferrif. Any future changes will be made there.
+
 # ferrif-zmachine
 
 Z-Machine interpreter written in Rust
